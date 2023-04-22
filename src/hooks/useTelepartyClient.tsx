@@ -24,7 +24,6 @@ const useTelepartyClient = ({ onClose }: TelepartyClientProps): TelepartyClientD
     /* onMessage uses the SocketMessage type which is not exported in the package,
     so I'm using any for now. */
     function handleReceiveMessage(message: any){
-        console.log(message)
         if (message.type == SocketMessageTypes.SET_TYPING_PRESENCE){
             setUsersTyping(message.data.usersTyping);
         } else if (message.type == SocketMessageTypes.SEND_MESSAGE){
