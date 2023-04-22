@@ -19,3 +19,11 @@ export const ButtonPrimary: React.FC<ButtonProps> = ({ text, onClick, style }) =
         </button>
     );
 };
+
+export const ButtonNeutral: React.FC<ButtonProps> = ({ text, onClick, style }) => {
+    return (
+        <button className={`bg-gray-500 hover:shadow-gray-500 ${UNIVERSAL_BUTTON_CLASS}`} onClick={onClick} style={style || UNIVERAL_BUTTON_STYLE}>
+            {text}
+        </button>
+    );
+};

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { TelepartyClient, SocketEventHandler, SessionChatMessage } from 'teleparty-websocket-lib';
+import { TelepartyClient, SocketEventHandler, SessionChatMessage, SocketMessageTypes } from 'teleparty-websocket-lib';
 
 interface TelepartyClientProps {
     onClose: () => void;
@@ -7,20 +7,31 @@ interface TelepartyClientProps {
 
 export interface TelepartyClientDetails {
     connectionReady: boolean;
-    messages: string[];
+    messages: SessionChatMessage[];
+    usersTyping: string[];
     clearMessages: () => void;
     client: TelepartyClient;
+    userId: string;
 }
 
 const useTelepartyClient = ({ onClose }: TelepartyClientProps): TelepartyClientDetails => {
     const [connectionReady, setConnectionReady] = useState(false);
-    const [messages, setMessages] = useState<string[]>([]);
+    const [messages, setMessages] = useState<SessionChatMessage[]>([]);
+    const [usersTyping, setUsersTyping] = useState<string[]>([]);
     const [client, setClient] = useState<TelepartyClient>();
+    const [userId, setUserId] = useState<string>("");
 
     /* onMessage uses the SocketMessage type which is not exported in the package,
     so I'm using any for now. */
     function handleReceiveMessage(message: any){
-        console.log(message);
+        console.log(message)
+        if (message.type == SocketMessageTypes.SET_TYPING_PRESENCE){
+            setUsersTyping(message.data.usersTyping);
+        } else if (message.type == SocketMessageTypes.SEND_MESSAGE){
+            setMessages((prevMessages) => [...prevMessages, message.data]);
+        } else if (message.type == "userId"){
+            setUserId(message.data.userId);
+        }
     }
 
     function close() {
@@ -42,7 +53,7 @@ const useTelepartyClient = ({ onClose }: TelepartyClientProps): TelepartyClientD
         setClient(client);
     }, []);
 
-    return { connectionReady, messages, clearMessages, client: client as TelepartyClient };
+    return { connectionReady, messages, usersTyping, userId, clearMessages, client: client as TelepartyClient };
 
 }
 

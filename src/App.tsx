@@ -1,7 +1,9 @@
 import React from 'react';
 import SelectChat from './pages/SelectChat';
+import Chat from './pages/Chat';
 import { Routes, Route } from 'react-router-dom';
 import { TelepartyClientProvider } from './contexts/client-context';
+import { UserProvider } from './contexts/user-context';
 import { useNavigate } from 'react-router-dom';
 
 const App: React.FC = () => {
@@ -14,9 +16,12 @@ const App: React.FC = () => {
 
   return (
     <TelepartyClientProvider onClose={onClientClose}>
-      <Routes>
-        <Route path="/" element={<SelectChat />} />
-      </Routes>
+      <UserProvider>
+        <Routes>
+          <Route path="/" element={<SelectChat />} />
+          <Route path="/chat/:chatId" element={<Chat />} />
+        </Routes>
+      </UserProvider>
     </TelepartyClientProvider>
   );
 }
