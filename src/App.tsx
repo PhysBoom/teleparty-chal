@@ -1,8 +1,12 @@
-import "./index.css"
+import React from 'react';
+import SelectChat from './pages/SelectChat';
+import { Routes, Route } from 'react-router-dom';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <h1 className="text-red-500">Hello World!</h1>
+    <Routes>
+      <Route path="/" element={<SelectChat />} />
+    </Routes>
   );
 }
 
